@@ -44,7 +44,11 @@ function Form() {
       }
     };
 
+
+
     fetchData();
+
+    
   }, []);
 
   useEffect(() => {
@@ -72,9 +76,17 @@ function Form() {
       toast.error("Please fill all required fields");
       return;
     }
+    const mailres=await axios.post("http://localhost:5000/api/userRoutes/sendEmail",{to:"bani.singh.met22@itbhu.ac.in",subject:data.title,message:data.content});
+
+    if(!mailres.data.success){
+      toast.error("Failed to send email");
+    }
+    else (
+      toast.success("Email sent successfully!")
+    )
 
     // const tagsArray = data.tags
-    //   ? String(data.tags)
+    // ? String(data.tags)
     //       .split(",")
     //       .map((tag) => tag.trim())
     //       .filter((tag) => tag)

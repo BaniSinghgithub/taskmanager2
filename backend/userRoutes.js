@@ -2,6 +2,34 @@ const express = require("express"); // import express from express
 const { User, Thread } = require("./SchemaMongodb");
 const UserRoutes = express.Router();
 const jwt=require("jsonwebtoken");
+const nodemailer = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
+UserRoutes.post("/sendEmail", async (req, res) => {
+  const { to, subject, message } = req.body;
+
+  try {
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to,
+      subject,
+      html: message,
+    });
+
+    console.log("Email sent successfully");
+    res.status(200).json({ success: true, message: "Email sent successfully!" });
+  } catch (error) {
+    console.error("Email send error:", error);
+    res.status(500).json({ success: false, message: "Failed to send email" });
+  }
+});
 
 // to get thread data on starting of page
 UserRoutes.get("/getthread", async (req, res) => {
