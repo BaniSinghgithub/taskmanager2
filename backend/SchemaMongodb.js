@@ -77,7 +77,7 @@ const threadSchema = new mongoose.Schema({
   status: {
     type: String,
     // enum: ['Upcoming', 'Closed', 'In progress'],   // 👈 Only these values are allowed in the string
-    default: 'active'
+    // default: 'active'
   }
 }, { timestamps: true });
 

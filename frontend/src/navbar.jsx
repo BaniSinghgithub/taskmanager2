@@ -6,8 +6,8 @@ function Navbar() {
   const navigate = useNavigate();
   
   const handleLogout = () =>{
-    sessionStorage.removeItem("user");
-    navigate("/");
+    sessionStorage.removeItem("token");
+    navigate("/login");
     window.location.reload();         // refresh the page
   }
 

@@ -3,6 +3,7 @@ import "./App.css";
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
   faPenToSquare,
   faTrash,
@@ -28,7 +29,7 @@ function Form() {
   const [newComment, setNewComment] = useState(""); // add new comment
   const [commentBoxIndex, setCommentBoxIndex] = useState(null);
   const navigate = useNavigate();
-  const [taskStatus,setTaskStatus]=useState("Upcoming");
+  const [taskStatus, setTaskStatus] = useState("Upcoming");
 
   useEffect(() => {
     // collecting data of threads from database on starting of page
@@ -109,10 +110,16 @@ function Form() {
         currentformdata
       );
       if (!response.status) {
-        
         toast.error("Failed to store thread in MongoDB");
-      }
-      else {
+      } else {
+        setUserData([...userdata, currentformdata]);
+        setData({
+          title: "",
+          content: "",
+          tags: "",
+          date: "",
+          status: "",
+        });
         toast.success("Task saved in database successfully!");
       }
       // const data = await response.json();
@@ -267,9 +274,9 @@ function Form() {
                 value={data.status}
                 onChange={getvalue}
               >
-                <option value="active">Upcoming</option>
-                <option value="closed">Closed</option>
-                <option value="archived">In progress</option>
+                <option value="Upcoming">Upcoming</option>
+                <option value="Closed">Closed</option>
+                <option value="In progress">In progress</option>
               </select>
             </div>
 
@@ -281,55 +288,55 @@ function Form() {
 
         <div className="container">
           <div className="threads">
-              <select
-                name="status"
-                className="taskStatus"
-                placeholder="Select status of task"
-                value={taskStatus}
-
-                onChange={(e) => setTaskStatus(e.target.value)}
-              >
-                <option value="active">Upcoming</option>
-                <option value="closed">Closed</option>
-                <option value="archived">In progress</option>
-              </select>
+            <select
+              name="status"
+              className="taskStatus"
+              placeholder="Select status of task"
+              value={taskStatus}
+              onChange={(e) => setTaskStatus(e.target.value)}
+            >
+              <option value="Upcoming">Upcoming</option>
+              <option value="Closed">Closed</option>
+              <option value="In progress">In progress</option>
+            </select>
             {/* </div> */}
 
             {userdata.length >= 1 ? (
-              userdata.map((thread, i) => (
+              userdata.map(
+                (thread, i) =>
+                  thread.status === taskStatus && (
+                    <div key={i} className="card mb-3">
+                      <div className="card-body">
+                        <div className="d-flex justify-content-between align-items-center">
+                          <h5 className="card-title">{thread.title}</h5>
+                          <div>
+                            <button
+                              className="btn btn-sm btn-primary me-2"
+                              title="Edit"
+                              onClick={() => editdata(i)}
+                            >
+                              <FontAwesomeIcon icon={faPenToSquare} />
+                            </button>
+                            <button
+                              className="btn btn-sm btn-danger me-2"
+                              title="Delete"
+                              onClick={() => deldata(i)}
+                            >
+                              <FontAwesomeIcon icon={faTrash} />
+                            </button>
+                            <button
+                              className="btn btn-sm btn-info"
+                              title="see / add comments"
+                              onClick={() => toggleComments(i)}
+                            >
+                              <FontAwesomeIcon icon={faComment} />
+                            </button>
+                          </div>
+                        </div>
 
-                thread.status === taskStatus && <div key={i} className="card mb-3">
-                  <div className="card-body">
-                    <div className="d-flex justify-content-between align-items-center">
-                      <h5 className="card-title">{thread.title}</h5>
-                      <div>
-                        <button
-                          className="btn btn-sm btn-primary me-2"
-                          title="Edit"
-                          onClick={() => editdata(i)}
-                        >
-                          <FontAwesomeIcon icon={faPenToSquare} />
-                        </button>
-                        <button
-                          className="btn btn-sm btn-danger me-2"
-                          title="Delete"
-                          onClick={() => deldata(i)}
-                        >
-                          <FontAwesomeIcon icon={faTrash} />
-                        </button>
-                        <button
-                          className="btn btn-sm btn-info"
-                          title="see / add comments"
-                          onClick={() => toggleComments(i)}
-                        >
-                          <FontAwesomeIcon icon={faComment} />
-                        </button>
-                      </div>
-                    </div>
+                        <p className="card-text">{thread.content}</p>
 
-                    <p className="card-text">{thread.content}</p>
-
-                    {/* <div className="mb-2">
+                        {/* <div className="mb-2">
                       {thread.tags.map((tag, tagIndex) => (
                         <span
                           key={tagIndex}
@@ -340,60 +347,60 @@ function Form() {
                       ))}
                     </div> */}
 
-                    <small className="text-muted">
-                      Status : {thread.status} | Created At : {thread.date.split("T")[0]}
-                      {/* {new Date(thread.createdAt).toLocaleDateString()} */}
-                    </small>
+                        <small className="text-muted">
+                          Status : {thread.status} | Created At :{" "}
+                          {thread.date.split("T")[0]}
+                          {/* {new Date(thread.createdAt).toLocaleDateString()} */}
+                        </small>
 
-                    {showComments[i] && (
-                      <div className="mt-3">
-                        <h6>Comments</h6>
-                        <div className="comments-section">
-                          {thread.comments.map((comment, commentIndex) => (
-                            <div
-                              key={commentIndex}
-                              className="comment border-bottom py-2"
-                            >
-                              <p className="mb-1">{comment.content}</p>
-                              <small className="text-muted">
-                                {/* By {comment.user} on{" "} */}
-                                {new Date(
-                                  comment.createdAt
-                                ).toLocaleDateString()}
-                              </small>
-                            </div>
-                          ))}
-                          {i === commentBoxIndex && (
-                            <div className="mt-2">
-                              <div className="input-group">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Add a comment..."
-                                  value={newComment}
-                                  onChange={(e) =>
-                                    setNewComment(e.target.value)
-                                  }
-                                />
-                                <button
-                                  className="btn btn-outline-primary"
-                                  onClick={() => addComment(i, newComment)}
+                        {showComments[i] && (
+                          <div className="mt-3">
+                            <h6>Comments</h6>
+                            <div className="comments-section">
+                              {thread.comments.map((comment, commentIndex) => (
+                                <div
+                                  key={commentIndex}
+                                  className="comment border-bottom py-2"
                                 >
-                                  Comment
-                                </button>
-                              </div>
+                                  <p className="mb-1">{comment.content}</p>
+                                  <small className="text-muted">
+                                    {/* By {comment.user} on{" "} */}
+                                    {new Date(
+                                      comment.createdAt
+                                    ).toLocaleDateString()}
+                                  </small>
+                                </div>
+                              ))}
+                              {i === commentBoxIndex && (
+                                <div className="mt-2">
+                                  <div className="input-group">
+                                    <input
+                                      type="text"
+                                      className="form-control"
+                                      placeholder="Add a comment..."
+                                      value={newComment}
+                                      onChange={(e) =>
+                                        setNewComment(e.target.value)
+                                      }
+                                    />
+                                    <button
+                                      className="btn btn-outline-primary"
+                                      onClick={() => addComment(i, newComment)}
+                                    >
+                                      Comment
+                                    </button>
+                                  </div>
+                                </div>
+                              )}
                             </div>
-                          )}
-                        </div>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                </div>
-              ))
+                    </div>
+                  )
+              )
             ) : (
-              <div className="alert alert-info">
-                No more task to show
-              </div>
+              <div className="alert alert-info">No more task to show</div>
             )}
           </div>
         </div>
