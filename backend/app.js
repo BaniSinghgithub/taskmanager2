@@ -1,3 +1,13 @@
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+  // Don't exit the process here for Railway
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  // Don't exit the process here for Railway
+});
+
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./mongodb");
