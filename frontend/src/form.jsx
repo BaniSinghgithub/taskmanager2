@@ -30,13 +30,14 @@ function Form() {
   const [commentBoxIndex, setCommentBoxIndex] = useState(null);
   const navigate = useNavigate();
   const [taskStatus, setTaskStatus] = useState("Upcoming");
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     // collecting data of threads from database on starting of page
     const fetchData = async () => {
       try {
         const databaseData = await axios.get(
-          "http://localhost:5000/api/userRoutes/getthread"
+          `${apiUrl}/api/userRoutes/getthread`
         );
         setUserData(databaseData.data);
       } catch (error) {
@@ -76,7 +77,7 @@ function Form() {
       toast.error("Please fill all required fields");
       return;
     }
-    const mailres=await axios.post("http://localhost:5000/api/userRoutes/sendEmail",{to:"bani.singh.met22@itbhu.ac.in",subject:data.title,message:data.content});
+    const mailres=await axios.post( `${apiUrl}/api/userRoutes/sendEmail",{to:"bani.singh.met22@itbhu.ac.in`,subject:data.title,message:data.content});
 
     if(!mailres.data.success){
       toast.error("Failed to send email");
@@ -118,7 +119,7 @@ function Form() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/userRoutes/savethread",
+         `${apiUrl}/api/userRoutes/savethread`,
         currentformdata
       );
       if (!response.status) {
@@ -157,7 +158,7 @@ function Form() {
             // toast.success(comment);
             // Sending update request to backend
             const response = await axios.put(
-              `http://localhost:5000/api/userRoutes/updatethread/${thread.content}`,
+              `${apiUrl}/api/userRoutes/updatethread/${thread.content}`,
               { comment }
             );
 
@@ -211,7 +212,7 @@ function Form() {
   // delete any topic/thread
   const deldata = async (index) => {
     const resonse = await axios.delete(
-      `http://localhost:5000/api/userRoutes/deletethread/${userdata[index].content}`
+      `${apiUrl}/api/userRoutes/deletethread/${userdata[index].content}`
     );
     if (resonse.status) {
       toast.success(resonse.message);
