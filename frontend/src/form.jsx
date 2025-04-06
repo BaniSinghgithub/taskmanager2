@@ -77,7 +77,7 @@ function Form() {
       toast.error("Please fill all required fields");
       return;
     }
-    const mailres=await axios.post( `${apiUrl}/api/userRoutes/sendEmail",{to:"bani.singh.met22@itbhu.ac.in`,subject:data.title,message:data.content});
+    const mailres=await axios.post( `${apiUrl}/api/userRoutes/sendEmail`,{to:"bani.singh.met22@itbhu.ac.in`,subject:data.title,message:data.content});
 
     if(!mailres.data.success){
       toast.error("Failed to send email");
