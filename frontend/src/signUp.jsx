@@ -27,8 +27,10 @@ export default function SignUp() {
     exists: false,
   });
 
-  const clientId =
-    "713538226120-j4dvkdhdu03r21vr4bm8j7f0lp0u5c4r.apps.googleusercontent.com";
+  const apiUrl=process.env.REACT_APP_API_URL;
+
+  const clientId =process.env.REACT_APP_GOOGLE_CLIENT_ID;
+    // "713538226120-j4dvkdhdu03r21vr4bm8j7f0lp0u5c4r.apps.googleusercontent.com";
 
   // useEffect(() => {
   //   toast("Please fill in all required fields");
@@ -57,7 +59,7 @@ export default function SignUp() {
 
     try {
       const response = await axios.get(
-        `http://localhost:5000/check-email?email=${email}`
+        ``${apiUrl}/check-email?email=${email}`
       );
 
       setEmailStatus({
@@ -118,7 +120,7 @@ export default function SignUp() {
 
       // If user not exist, register
       const registerResponse = await axios.post(
-        "http://localhost:5000/api/userRoutes/register",
+        `${apiUrl}/api/userRoutes/register`,
         {
           name: userData.name,
           email: userData.email,
@@ -183,7 +185,7 @@ export default function SignUp() {
 
     try {
       const registerResponse = await axios.post(
-        "http://localhost:5000/api/userRoutes/register",
+        `${apiUrl}/api/userRoutes/register`,
         {
           name: formData.username,
           email: formData.email,
