@@ -16,6 +16,8 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const apiUrl=process.env.REACT_APP_API_URL;
+  const clientId=process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
   useEffect(() => {
     const user = JSON.parse(sessionStorage.getItem("token"));
@@ -25,8 +27,8 @@ const LoginPage = () => {
     }
   }, []);
 
-  const clientId =
-    "713538226120-j4dvkdhdu03r21vr4bm8j7f0lp0u5c4r.apps.googleusercontent.com";
+  // const clientId =
+    // "713538226120-j4dvkdhdu03r21vr4bm8j7f0lp0u5c4r.apps.googleusercontent.com";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,8 +39,7 @@ const LoginPage = () => {
     }
 
     try {
-        const loginResponse = await axios.post(
-            "http://localhost:5000/api/userRoutes/login",
+        const loginResponse = await axios.post(`${apiUrl}/api/userRoutes/login`,
             {
               email: email.toLowerCase(),
               password: password
@@ -78,7 +79,7 @@ const LoginPage = () => {
 
       try {
         const loginResponse = await axios.post(
-          "http://localhost:5000/api/userRoutes/loginAuth",
+          (`${apiUrl}/api/userRoutes/loginAuth`,
           {
             email: user.email,
             password: "google-auth-user"
