@@ -59,7 +59,7 @@ export default function SignUp() {
 
     try {
       const response = await axios.get(
-        ``${apiUrl}/check-email?email=${email}`
+        `${apiUrl}/check-email?email=${email}`
       );
 
       setEmailStatus({
