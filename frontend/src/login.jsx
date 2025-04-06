@@ -79,7 +79,7 @@ const LoginPage = () => {
 
       try {
         const loginResponse = await axios.post(
-          (`${apiUrl}/api/userRoutes/loginAuth`,
+          `${apiUrl}/api/userRoutes/loginAuth`,
           {
             email: user.email,
             password: "google-auth-user"
