@@ -12,6 +12,10 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+UserRoutes.get("/hello",()=>{
+  res.send("hello sir");
+});
+
 UserRoutes.post("/sendEmail", async (req, res) => {
   const { to, subject, message } = req.body;
 
