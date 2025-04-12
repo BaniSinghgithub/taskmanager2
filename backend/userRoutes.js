@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-UserRoutes.get("/hello",()=>{
+UserRoutes.get("/hello",(req,res)=>{
   res.send("hello sir");
 });
 
